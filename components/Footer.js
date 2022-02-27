@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const AppFooter = styled.footer`
   display: flex;
   flex: 1;
-  padding: 1rem 0;
+  padding: 1rem 0rem;
   justify-content: center;
   align-items: center;
 `;

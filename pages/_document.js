@@ -10,7 +10,7 @@ export default function Document() {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
           rel="stylesheet"
         />
-        <title>Ukraine Crypto Donations</title>
+        {/* <title> is set  in _app.js */}
         <meta
           name="description"
           content="The crypto community supports Ukraine! See how much money we've raised for the cause and find out how you can support as well."
