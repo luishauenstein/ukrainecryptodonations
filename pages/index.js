@@ -1,15 +1,19 @@
-import styles from '../styles/Home.module.css';
 import Footer from '../components/Footer';
 import Flag from '../components/Flag';
+import styled from 'styled-components';
+
+const MainContainer = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
 
 export default function Home() {
   return (
-    <div>
-      <main className={styles.main}>
-        <Flag />
-      </main>
-
+    <MainContainer>
+      <Flag />
       <Footer />
-    </div>
+    </MainContainer>
   );
 }
