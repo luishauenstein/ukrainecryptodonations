@@ -10,12 +10,10 @@ const AppFooter = styled.footer`
 
 export default function Footer() {
   return (
-    <>
-      <AppFooter>
-        <a href="https://twitter.com/luishauenstein" target="_blank" rel="noopener noreferrer">
-          twitter.com/luishauenstein
-        </a>
-      </AppFooter>
-    </>
+    <AppFooter>
+      <a href="https://twitter.com/luishauenstein" target="_blank" rel="noopener noreferrer">
+        twitter.com/luishauenstein
+      </a>
+    </AppFooter>
   );
 }
