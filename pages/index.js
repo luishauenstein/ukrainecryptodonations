@@ -10,6 +10,13 @@ const formatNumber = (number) => {
 };
 
 export async function getStaticProps() {
+  // 192 backandalive
+  const btcManualOffset = 192;
+  // 2130 gov withdrawal + 126 backandalive + 1414 ukraineDAO
+  const ethManualOffset = 2130 + 126 + 1414;
+  // 1293993 gov withdrawal + 19000 backandalive
+  const usdtManualOffset = 1293993 + 19000;
+
   //func runs ~170ms according to console.time()
   const mempoolApiRoute = 'https://mempool.space/api/address/357a3So9CbsNfBBgFYACGvxxS6tMaDoa1P'; // BTC balance
   const etherscanEthBalanceRoute = `https://api.etherscan.io/api?module=account&action=balance&address=0x165CD37b4C644C2921454429E7F9358d18A45e14&tag=latest&apikey=${process.env.ETHERSCAN_API_KEY}`; // ETH balance
@@ -31,9 +38,10 @@ export async function getStaticProps() {
   ]);
   const [btcAmount, ethAmount, usdtAmount, btcPrice, ethPrice] = await Promise.all([
     (await (resBtcData.chain_stats.funded_txo_sum + resBtcData.mempool_stats.funded_txo_sum)) /
-      100000000,
-    ethers.utils.formatEther(await resEthData.result),
-    Math.floor((await resUsdtData.result) / 1000000),
+      100000000 +
+      btcManualOffset,
+    parseInt(ethers.utils.formatEther(await resEthData.result)) + ethManualOffset,
+    Math.floor((await resUsdtData.result) / 1000000) + usdtManualOffset,
     await resPricesData.bitcoin.usd,
     await resPricesData.ethereum.usd,
   ]);

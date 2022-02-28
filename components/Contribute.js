@@ -34,8 +34,9 @@ export default function Contribute() {
   return (
     <ContainerDiv>
       <TextDiv>
-        The funds were donated to official Bitcoin and Ethereum addresses that the Ukranian
-        government has direct control of (see Tweet below). <br />
+        A big portion of this has been donated to the official Bitcoin and Ethereum addresses that
+        the Ukranian government has direct control of. Sending funds to them is the simplest way to
+        contribute. <br />
       </TextDiv>
       <GoDonate>Go donate and make numba go up! 🇺🇦 </GoDonate>
       <TweetEmbed align="center" tweetId="1497594592438497282" />
