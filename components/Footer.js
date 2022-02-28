@@ -1,19 +1,23 @@
 import styled from 'styled-components';
 
 const AppFooter = styled.footer`
-  display: flex;
-  flex: 1;
+  text-align: center;
   padding: 1rem 0rem;
-  justify-content: center;
-  align-items: center;
+  padding-top: 3rem;
+  color: ${(props) => props.theme.lowContrast};
 `;
 
 export default function Footer() {
   return (
     <AppFooter>
-      <a href="https://twitter.com/luishauenstein" target="_blank" rel="noopener noreferrer">
-        twitter.com/luishauenstein
-      </a>
+      <div>
+        <a href="https://twitter.com/luishauenstein" target="_blank" rel="noopener noreferrer">
+          DM to get in touch.
+        </a>
+      </div>
+      <div>
+        Note: I am aware of the several other initiatives that exist and will add them here soon.
+      </div>
     </AppFooter>
   );
 }
