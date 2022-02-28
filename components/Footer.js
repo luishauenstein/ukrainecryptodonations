@@ -16,8 +16,8 @@ export default function Footer() {
         </a>
       </div>
       <div>
-        Initiatives included in this counter are the government addresses, the Return Alive
-        Foundation addresses and UkraineDAO.
+        Included in this counter are the government addresses, the Return Alive Foundation addresses
+        and UkraineDAO.
       </div>
     </AppFooter>
   );
