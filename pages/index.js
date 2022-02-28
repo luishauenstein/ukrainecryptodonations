@@ -66,7 +66,7 @@ export async function getStaticProps() {
       amountUSD,
       amountsCrypto,
     },
-    revalidate: 30, //incremental static regeneration every 30 seconds
+    revalidate: 30, //incremental static regeneration every 30 secs
   };
 }
 
