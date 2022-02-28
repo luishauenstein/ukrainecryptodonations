@@ -13,7 +13,7 @@ export async function getStaticProps() {
   // 192 backandalive
   const btcManualOffset = 192;
   // 2130 gov withdrawal + 126 backandalive + 1414 ukraineDAO
-  const ethManualOffset = 2130 + 126 + 1414;
+  const ethManualOffset = 2130 + 126 + 1418;
   // 1293993 gov withdrawal + 19000 backandalive
   const usdtManualOffset = 1293993 + 19000;
 
