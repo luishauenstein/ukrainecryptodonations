@@ -22,26 +22,12 @@ const EmojiDiv = styled.div`
   padding: 3.5rem 0;
 `;
 
-const amountUSD = '15,204,587';
-const amountsCrypto = {
-  btc: '1,234',
-  btcUSD: '2,345,987',
-  eth: '5,678',
-  ethUSD: '23,987,234',
-  usdt: '90,827,349',
-};
-
-//func for turning int to currency string
-const formatNumber = (number) => {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-};
-
-export default function DonationStatus() {
+export default function DonationStatus(props) {
   return (
     <ComponentContainer>
-      <TotalDonationsDollar amount={amountUSD} />
+      <TotalDonationsDollar amount={props.amountUSD} />
       <EmojiDiv>💙 💛</EmojiDiv>
-      <TotalBitcoinEtherTether amounts={amountsCrypto} />
+      <TotalBitcoinEtherTether amounts={props.amountsCrypto} />
     </ComponentContainer>
   );
 }
