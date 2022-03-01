@@ -48,8 +48,8 @@ async function fetchCryptoPrices() {
 }
 
 export async function getStaticProps() {
-  const ethManualOffset = 1571 /* UkraineDAO */ + 2529; /* govt withdrawal*/
-  const usdtManualOffset = 1730564; /* govt withdrawal */
+  const ethManualOffset = 1657 /* UkraineDAO */ + 2529; /* govt withdrawal*/
+  const usdtManualOffset = 2820717; /* govt withdrawal */
   const fiatManualOffset = 5861560; /* gavin wood 298,367 DOT donation */ // manuel fiat offset in dollars
 
   const [
