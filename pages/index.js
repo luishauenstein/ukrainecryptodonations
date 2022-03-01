@@ -10,12 +10,12 @@ const formatNumber = (number) => {
 };
 
 export async function getStaticProps() {
-  // 192 backandalive
-  const btcManualOffset = 192;
-  // 2130 gov withdrawal + 126 backandalive + 1414 ukraineDAO
-  const ethManualOffset = 2130 + 126 + 1418;
-  // 1293993 gov withdrawal + 19000 backandalive
-  const usdtManualOffset = 1293993 + 19000;
+  // 194 backandalive
+  const btcManualOffset = 194;
+  // 2130 gov withdrawal + 131 backandalive + 1502 ukraineDAO
+  const ethManualOffset = 2443 + 131 + 1502;
+  // 1,720,996 gov withdrawal + 22000 backandalive
+  const usdtManualOffset = 1720996 + 22000;
 
   //func runs ~170ms according to console.time()
   const mempoolApiRoute = 'https://mempool.space/api/address/357a3So9CbsNfBBgFYACGvxxS6tMaDoa1P'; // BTC balance
