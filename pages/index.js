@@ -9,42 +9,79 @@ const formatNumber = (number) => {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
+//gets floating point btc balance
+async function fetchBTC(address) {
+  const res = await fetch(`https://mempool.space/api/address/${address}`);
+  const resJson = await res.json();
+  const btcAmount =
+    (await (resJson.chain_stats.funded_txo_sum + resJson.mempool_stats.funded_txo_sum)) / 100000000;
+  return btcAmount;
+}
+
+async function fetchETHBalance(address) {
+  const res = await fetch(
+    `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${process.env.ETHERSCAN_API_KEY}`
+  );
+  const resJson = await res.json();
+  const ethAmount = parseFloat(ethers.utils.formatEther(await resJson.result));
+  return ethAmount;
+}
+
+async function fetchUSDTBalance(address) {
+  const res = await fetch(
+    `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0xdAC17F958D2ee523a2206206994597C13D831ec7&address=${address}&tag=latest&apikey=${process.env.ETHERSCAN_API_KEY}`
+  );
+  const resJson = await res.json();
+  const usdtAmount = (await resJson.result) / 1000000;
+  return usdtAmount;
+}
+
+async function fetchCryptoPrices() {
+  const route = `https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum&vs_currencies=usd`; // BTC and ETH USD price
+  const res = await fetch(route);
+  const resJson = await res.json();
+  const prices = {
+    btc: await resJson.bitcoin.usd,
+    eth: await resJson.ethereum.usd,
+  };
+  return prices;
+}
+
 export async function getStaticProps() {
-  // 194 backandalive
-  const btcManualOffset = 194;
   // 2130 gov withdrawal + 131 backandalive + 1502 ukraineDAO
-  const ethManualOffset = 2443 + 131 + 1502;
+  const ethManualOffset = 0; //2443 + 131 + 1502;
   // 1,720,996 gov withdrawal + 22000 backandalive
-  const usdtManualOffset = 1720996 + 22000;
+  const usdtManualOffset = 0; //1720996 + 22000;
 
-  //func runs ~170ms according to console.time()
-  const mempoolApiRoute = 'https://mempool.space/api/address/357a3So9CbsNfBBgFYACGvxxS6tMaDoa1P'; // BTC balance
-  const etherscanEthBalanceRoute = `https://api.etherscan.io/api?module=account&action=balance&address=0x165CD37b4C644C2921454429E7F9358d18A45e14&tag=latest&apikey=${process.env.ETHERSCAN_API_KEY}`; // ETH balance
-  const etherscanUsdtBalanceRoute = `https://api.etherscan.io/api?module=account&action=tokenbalance&contractaddress=0xdAC17F958D2ee523a2206206994597C13D831ec7&address=0x165CD37b4C644C2921454429E7F9358d18A45e14&tag=latest&apikey=${process.env.ETHERSCAN_API_KEY}`; // USDT balance
-  const coingeckoCryptoPricesRoute = `https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum&vs_currencies=usd`; // BTC and ETH USD price
-
-  const [resBtcFetch, resEthFetch, resUsdtFetch, resPricesFetch] = await Promise.all([
-    fetch(mempoolApiRoute),
-    fetch(etherscanEthBalanceRoute),
-    fetch(etherscanUsdtBalanceRoute),
-    fetch(coingeckoCryptoPricesRoute),
+  const [
+    backandaliveBTC,
+    backandaliveETHBalance,
+    backandaliveUSDTBalance,
+    governmentBTC,
+    governmentETHBalance,
+    governmentUSDTBalance,
+    prices,
+  ] = await Promise.all([
+    //backandalive
+    fetchBTC('bc1qkd5az2ml7dk5j5h672yhxmhmxe9tuf97j39fm6'),
+    fetchETHBalance('0xa1b1bbB8070Df2450810b8eB2425D543cfCeF79b'),
+    fetchUSDTBalance('0xa1b1bbB8070Df2450810b8eB2425D543cfCeF79b'),
+    //government ukraine
+    fetchBTC('357a3So9CbsNfBBgFYACGvxxS6tMaDoa1P'),
+    fetchETHBalance('0x165CD37b4C644C2921454429E7F9358d18A45e14'),
+    fetchUSDTBalance('0x165CD37b4C644C2921454429E7F9358d18A45e14'),
+    //prices
+    fetchCryptoPrices(),
   ]);
 
-  const [resBtcData, resEthData, resUsdtData, resPricesData] = await Promise.all([
-    resBtcFetch.json(),
-    resEthFetch.json(),
-    resUsdtFetch.json(),
-    resPricesFetch.json(),
-  ]);
   const [btcAmount, ethAmount, usdtAmount, btcPrice, ethPrice] = await Promise.all([
-    (await (resBtcData.chain_stats.funded_txo_sum + resBtcData.mempool_stats.funded_txo_sum)) /
-      100000000 +
-      btcManualOffset,
-    parseInt(ethers.utils.formatEther(await resEthData.result)) + ethManualOffset,
-    Math.floor((await resUsdtData.result) / 1000000) + usdtManualOffset,
-    await resPricesData.bitcoin.usd,
-    await resPricesData.ethereum.usd,
+    Math.floor(backandaliveBTC + governmentBTC),
+    Math.floor(backandaliveETHBalance + governmentETHBalance + ethManualOffset),
+    Math.floor(backandaliveUSDTBalance + governmentUSDTBalance + usdtManualOffset),
+    prices.btc,
+    prices.eth,
   ]);
+
   const [btc, btcUSD, eth, ethUSD, usdt] = await Promise.all([
     Math.floor(btcAmount),
     Math.floor(btcAmount * btcPrice),
